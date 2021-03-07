@@ -7,6 +7,6 @@ MessageTuple = namedtuple('MessageTuple', ['type', 'message'])
 def send_directmessage():
   pass
 
-def request_messages():
+def request_messages(user_token, msg):
   json_request = json.dumps({"token": user_token, "directmessage": msg})
-  pass
+  return json_request
