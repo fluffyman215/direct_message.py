@@ -46,11 +46,12 @@ class DirectMessenger(DirectMessage):
 	def retrieve_new(self) -> list:
 	# returns a list of DirectMessage objects containing all new messages
 		new_messages = self.send_request("new")
-		pass
+		list_messages = ds_protocol.json_extract_retrieve(new_messages)
+		return list_messages.
 
 	def retrieve_all(self) -> list:
 	# returns a list of DirectMessage objects containing all messages
-		pass
+		
 	
 	def send_request(self, new_msg):
 		'''
