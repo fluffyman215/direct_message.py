@@ -8,7 +8,7 @@ class DirectMessage:
 	self.timestamp = None
 
 
-class DirectMessenger:
+class DirectMessenger(DirectMessage):
 	def __init__(self, dsuserver=None, username=None, password=None):
 		self.token = None
 		self.dsuserver = None
@@ -45,7 +45,7 @@ class DirectMessenger:
 
 	def retrieve_new(self) -> list:
 	# returns a list of DirectMessage objects containing all new messages
-
+		new_messages = self.send_request("new")
 		pass
 
 	def retrieve_all(self) -> list:
@@ -69,5 +69,7 @@ class DirectMessenger:
 				send.flush()
 
 				msg = recv.readline()
+				
+				return msg
 		
 
