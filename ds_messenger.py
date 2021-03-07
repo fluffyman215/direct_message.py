@@ -28,9 +28,12 @@ class DirectMessenger:
 
 				msg = recv.readline()
 				ds_connection = True
-		except:
+		except socket.gaierror:
 			print('Unable to Connect')
 			ds_connection = False
+			return ds_connection
+		except socket.error as e:
+			return False
 			
 
 	def send(self, message:str, recipient:str) -> bool:
