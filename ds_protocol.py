@@ -8,4 +8,5 @@ def send_directmessage():
   pass
 
 def request_messages():
+  json_request = json.dumps({"token": user_token, "directmessage": msg})
   pass
