@@ -20,7 +20,7 @@ class DirectMessenger:
     # returns true if message successfully sent, false if send failed.
 	try:
 		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
-			client.connect(server, port)
+			client.connect(self.dsuserver, port)
 			
 			send = client.makefile('w')
             		recv = client.makefile('r')
