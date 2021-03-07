@@ -14,22 +14,28 @@ class DirectMessenger:
 		self.dsuserver = None
 		self.username = None
 		self.password = None
-
-
-	def send(self, message:str, recipient:str) -> bool:
-		# returns true if message successfully sent, false if send failed.
+	
+	def connection(self, server:str, port:int):
 		try:
 			with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
-				client.connect(self.dsuserver, port)
+				client.connect(server, port)
 
 				send = client.makefile('w')
 				recv = client.makefile('r')
-				
-				message = ds_protocol.json_directmessage(self.token, message, recipient)
+
 				send.write(message + '\r\n')
 				send.flush()
 
 				msg = recv.readline()
+				ds_connection = True
+		except:
+			print('Unable to Connect')
+			ds_connection = False
+			
+
+	def send(self, message:str, recipient:str) -> bool:
+		# returns true if message successfully sent, false if send failed.
+		connet = connection(self.dsuserver, port)
 
 
 	pass
@@ -55,8 +61,7 @@ class DirectMessenger:
 
 				send = client.makefile('w')
 				recv = client.makefile('r')
-				
-				new_msg = ds_protocol.request_messages(self.token, new_msg)
+
 				send.write(new_msg + '\r\n')
 				send.flush()
 
