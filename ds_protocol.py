@@ -1,8 +1,7 @@
 #For JSON SCRIPT
 import json, time
 from collections import namedtuple
-DataTuple = namedtuple('DataTuple', ['type','message','token'])
-MessageTuple = namedtuple('MessageTuple', ['type', 'message'])
+DataTuple = namedtuple('DataTuple', ['type','message'])
 
 def send_directmessage(user_token, msg, recipient):
   
@@ -26,7 +25,7 @@ def extract_json_sent(json_msg:str) -> DataTuple:
   except json.JSONDecodeError:
     print("Json cannot be decoded.")
 
-  return DataTuple(server_response, message, token)
+  return DataTuple(server_response, message)
 
 def extract_json_receive(json_msg:str) -> DataTuple:
   '''
@@ -41,4 +40,4 @@ def extract_json_receive(json_msg:str) -> DataTuple:
   except json.JSONDecodeError:
     print("Json cannot be decoded.")
 
-  return DataTuple(server_response, message, token)
+  return DataTuple(server_response, message)
