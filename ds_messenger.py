@@ -24,7 +24,8 @@ class DirectMessenger:
 
 				send = client.makefile('w')
 				recv = client.makefile('r')
-
+				
+				message = ds_protocol.json_directmessage(self.token, message, recipient)
 				send.write(message + '\r\n')
 				send.flush()
 
@@ -54,7 +55,8 @@ class DirectMessenger:
 
 				send = client.makefile('w')
 				recv = client.makefile('r')
-
+				
+				new_msg = ds_protocol.request_messages(self.token, new_msg)
 				send.write(new_msg + '\r\n')
 				send.flush()
 
