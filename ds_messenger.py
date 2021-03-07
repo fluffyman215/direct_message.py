@@ -1,3 +1,6 @@
+import socket
+import ds_protocol
+
 class DirectMessage:
   def __init__(self):
     self.recipient = None
@@ -26,6 +29,8 @@ class DirectMessenger:
 		    	send.flush()
 			
 		    	msg = recv.readline()
+			
+			
     pass
 		
   def retrieve_new(self) -> list:
