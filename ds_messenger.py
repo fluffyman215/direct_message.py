@@ -20,7 +20,6 @@ class DirectMessenger:
 		self.password = None
 	
 	def connection(self, server:str, port:int):
-		# responsible for the overall socket connection to the server 
 		try:
 			ds_conn = DSConnection()
 			ds_conn.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -48,19 +47,25 @@ class DirectMessenger:
 			resp = write(msg)
 			resps = extract_response_typ(resp)
 			if resps == 'ok':
+				print('Direct Message Sent')
 				return True
 			else:
+				print('Direct Message Unable to be Sent')
 				return False
 
 
 
 	def retrieve_new(self) -> list:
 	# returns a list of DirectMessage objects containing all new messages
-
-		pass
+		new_msg = ds_protocol.request(messages(self.token, "new"))
+		messages = ds_protocol.extract_json_new(new_msg)
+		return messages.list
 
 	def retrieve_all(self) -> list:
 	# returns a list of DirectMessage objects containing all messages
+		new_msg = ds_protocol.request(messages(self.token, "new"))
+		messages = ds_protocol.extract_json_all(new_msg)
+		return messages.message
 		pass
 	
 	def send_request(self, new_msg):
