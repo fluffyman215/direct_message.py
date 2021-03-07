@@ -12,7 +12,7 @@ def request_messages(user_token, msg):
   json_request = json.dumps({"token": user_token, "directmessage": msg})
   return json_request
 
-def extract_json_sent(json_msg:str) -> DataTuple:
+def extract_json_new(json_msg:str) -> DataTuple:
   '''
   Call the json.loads function on a json string and convert it to a DataTuple object
   '''
@@ -27,7 +27,7 @@ def extract_json_sent(json_msg:str) -> DataTuple:
 
   return DataTuple(server_response, message)
 
-def extract_json_receive(json_msg:str) -> DataTuple:
+def extract_json_all(json_msg:str) -> DataTuple:
   '''
   Call the json.loads function on a json string and convert it to a DataTuple object
   '''
