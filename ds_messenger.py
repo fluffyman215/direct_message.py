@@ -66,7 +66,6 @@ class DirectMessenger:
 		new_msg = ds_protocol.request(messages(self.token, "new"))
 		messages = ds_protocol.extract_json_all(new_msg)
 		return messages.message
-		pass
 	
 	def send_request(self, new_msg):
 		'''
