@@ -47,8 +47,10 @@ class DirectMessenger:
 			resp = write(msg)
 			resps = extract_response_typ(resp)
 			if resps == 'ok':
+				print('Direct Message Sent')
 				return True
 			else:
+				print('Direct Message Unable to be Sent')
 				return False
 
 
