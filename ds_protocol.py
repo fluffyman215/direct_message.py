@@ -41,3 +41,12 @@ def extract_json_receive(json_msg:str) -> DataTuple:
     print("Json cannot be decoded.")
 
   return DataTuple(server_response, message)
+
+def extract_response_typ(json_str:str) -> str:
+  typ = ''
+  try:
+    json_obj = json.loads(json_str)
+    typ = json_obj['response']['type']
+  except json.JSONDecodeError:
+    print('JSON cannot be decoded')
+  return typ
