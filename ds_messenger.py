@@ -20,6 +20,7 @@ class DirectMessenger:
 		self.password = None
 	
 	def connection(self, server:str, port:int):
+		# responsible for the overall socket connection to the server 
 		try:
 			ds_conn = DSConnection()
 			ds_conn.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,10 +48,8 @@ class DirectMessenger:
 			resp = write(msg)
 			resps = extract_response_typ(resp)
 			if resps == 'ok':
-				print('Direct Message Sent')
 				return True
 			else:
-				print('Direct Message Unable to be Sent')
 				return False
 
 
