@@ -10,6 +10,8 @@ class DirectMessage:
 
 class DirectMessenger(DirectMessage):
 	def __init__(self, dsuserver=None, username=None, password=None):
+		## dsu_server = 168.235.86.101
+		## port = 3021
 		self.token = None
 		self.dsuserver = None
 		self.username = None
@@ -68,8 +70,9 @@ class DirectMessenger(DirectMessage):
 
 				send = client.makefile('w')
 				recv = client.makefile('r')
-
-				send.write(new_msg + '\r\n')
+				
+				msg_to_send = ds_protocol.request_messages(self.token, new_msg)
+				send.write(msg_to_send + '\r\n')
 				send.flush()
 
 				msg = recv.readline()
