@@ -3,7 +3,7 @@ import json, time
 from collections import namedtuple
 DataTuple = namedtuple('DataTuple', ['type','message'])
 
-def send_directmessage(user_token, msg, recipient):
+def send_direct_message(user_token, msg, recipient):
 
     json_directmessage = json.dumps({"token":user_token, "directmessage": {"entry": msg,"recipient": recipient, "timestamp": str(time.time())}})
     
