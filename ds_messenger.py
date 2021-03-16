@@ -39,6 +39,20 @@ class DirectMessenger:
         resp = ds_conn.recv.readline()
 
         return resp
+    
+    def join_server(self, username, password, connect):
+        '''
+        Main purpose is to extract the token from the server.
+        '''
+        
+        join_str = ds_protocol.join(self.username, self.password)
+
+        joined = self.write(connect, join_str)
+
+        typ, token = ds_protocol.extract_response_typ(joined)
+
+        if typ == "ok":
+            self.token = token
 
     def send(self, message:str, recipient:str) -> bool:
         # returns true if message successfully sent, false if send failed.
@@ -48,8 +62,8 @@ class DirectMessenger:
             return False
         else:
             msg = ds_protocol.send_direct_message(self.token, message, recipient)
-            resp = write(msg)
-            resps = extract_response_typ(resp)
+            resp = self.write(msg)
+            resps = ds_protocol.extract_response_typ(resp)
         if resps == 'ok':
             print('Direct Message Sent')
             return True
