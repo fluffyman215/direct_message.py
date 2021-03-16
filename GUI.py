@@ -186,11 +186,11 @@ class MainApp(tk.Frame):
     """
     Closes the program when the 'Close' menu item is clicked.
     """
-    def boot_screen(self):
-        login_window = tk.Toplevel()
+    #def boot_screen(self):
+        #login_window = tk.Toplevel()
         
-        title = tk.Label(login_window, text='LOGIN')
-        title.pack(fill='x', padx=5, pady=5)
+        #title = tk.Label(login_window, text='LOGIN')
+        #title.pack(fill='x', padx=5, pady=5)
     
     def close(self):
         self.root.destroy()
@@ -201,7 +201,21 @@ class MainApp(tk.Frame):
         dm.send(self.body.get_text_entry(), recipient)
 
     def add_user(self):
-        pass
+        new_user = tk.Toplevel()
+        new_user.geometry("300x100")
+        
+        title = tk.Label(new_user, text='LOGIN')
+        title.pack(fill='x', padx=5, pady=5)
+
+        self.msg_editor = tk.Text(master=new_user, height=0)
+        self.msg_editor.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True, padx=5, pady=5)
+
+        save_button = tk.Button(master=new_user, text="Add User", width=20)
+        save_button.configure(command=self.get_user_info)
+        save_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
+        
+    def get_user_info(self):
+        return self.msg_editor.get('1.0', 'end').rstrip()
     
     def refresh_msg(self):
         pass
