@@ -15,6 +15,26 @@ def request_messages(user_token, msg):
     
     return json_request
 
+def extract_response_typ(json_str:str) -> str:
+    typ = ''
+    token = ''
+    try:
+        json_obj = json.loads(json_str)
+        
+        typ = json_obj['response']['type']
+        message = json_obj['response']['message']
+
+        if typ == "ok" and message != "Direct message sent":
+            token = json_obj['response']['token']
+
+            return typ, token
+        else:
+            return typ
+
+    except json.JSONDecodeError:
+        print('JSON cannot be decoded')
+        return typ
+
 def extract_json_new(json_msg:str) -> DataTuple:
     '''
     Call the json.loads function on a json string and convert it to a DataTuple object
@@ -45,14 +65,4 @@ def extract_json_all(json_msg:str) -> DataTuple:
         print("Json cannot be decoded.")
 
         return DataTuple(server_response, message)
-
-def extract_response_typ(json_str:str) -> str:
-    typ = ''
-    try:
-        json_obj = json.loads(json_str)
-        typ = json_obj['response']['type']
-    except json.JSONDecodeError:
-        print('JSON cannot be decoded')
-        return typ
-
 
