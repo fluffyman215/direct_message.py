@@ -10,8 +10,8 @@ class Body(tk.Frame):
         tk.Frame.__init__(self, root)
         self.root = root
 
-        # a list of the Post objects available in the active DSU file
-        self._posts = []
+        # a list of the User objects available in the active DSU file
+        self._users = []
         
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the Body instance 
@@ -23,8 +23,8 @@ class Body(tk.Frame):
     is selected.
     """
     def node_select(self, event):
-        index = int(self.posts_tree.selection()[0])-1 #selections are not 0-based, so subtract one.
-        entry = self._posts[index].entry
+        index = int(self.users_tree.selection()[0])-1 #selections are not 0-based, so subtract one.
+        entry = self._users[index].entry
         self.set_text_entry(entry)
     
     """
@@ -46,24 +46,24 @@ class Body(tk.Frame):
     """
     Populates the self._posts attribute with posts from the active DSU file.
     """
-    def set_posts(self, posts:list):
+    def set_users(self, posts:list):
         # TODO: Write code to populate self._posts with the post data passed
         # in the posts parameter and repopulate the UI with the new post entries.
         # HINT: You will have to write the delete code yourself, but you can take 
         # advantage of the self.insert_posttree method for updating the posts_tree
         # widget.
-        self._posts = posts[:]
+        self._users = posts[:]
         count = 1
-        for post in self._posts:
-            self._insert_post_tree(count, post)
+        for user in self._users:
+            self._insert_user_tree(count, post)
             count += 1
 
     """
-    Inserts a single post to the post_tree widget.
+    Inserts a single user to the user_tree widget.
     """
-    def insert_post(self, post:list):
-        self._posts.append(post)
-        self._insert_post_tree(len(self._posts), post)
+    def insert_user(self, post:list):
+        self._users.append(post)
+        self._insert_user_tree(len(self._users), post)
 
     """
     Resets all UI widgets to their default state. Useful for when clearing the UI is neccessary such
@@ -71,21 +71,21 @@ class Body(tk.Frame):
     """
     def reset_ui(self):
         self.set_text_entry("")
-        self._posts = []
-        for item in self.posts_tree.get_children():
-            self.posts_tree.delete(item)
+        self._users = []
+        for item in self.users_tree.get_children():
+            self.users_tree.delete(item)
 
     """
     Inserts a post entry into the posts_tree widget.
     """
-    def _insert_post_tree(self, id, post:list):
+    def _insert_user_tree(self, id, post:list):
         entry = post.entry
         # Since we don't have a title, we will use the first 24 characters of a
-        # post entry as the identifier in the post_tree widget.
+        # post entry as the identifier in the user_tree widget.
         if len(entry) > 25:
             entry = entry[:24] + "..."
         
-        self.posts_tree.insert('', id, id, text=entry)
+        self.users_tree.insert('', id, id, text=entry)
     
     """
     Call only once upon initialization to add widgets to the frame
