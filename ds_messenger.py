@@ -47,7 +47,7 @@ class DirectMessenger:
             print('Unable to connect')
             return False
         else:
-            msg = ds_protocol.send_directmessage(self.token, message, recipient)
+            msg = ds_protocol.send_direct_message(self.token, message, recipient)
             resp = write(msg)
             resps = extract_response_typ(resp)
         if resps == 'ok':
