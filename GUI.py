@@ -243,22 +243,30 @@ class MainApp(tk.Frame):
 
     def get_user_info(self):
         self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
+        self.body.recipient = self.msg_editor.get('1.0', 'end').rstrip()
         self.user_window.destroy()
     
     def refresh_msg(self):
         if self.username != None:
             dm = DirectMessenger(self.dsuserver,self.username,self.password)
             all_messages = dm.retrieve_all()
+            before = self.body._users.copy()
             self.body.reset_ui()
-            d = {}
+            after = {}
             if len(all_messages) != 0:
                 for i in range(len(all_messages)):
-                    d[all_messages[i]['from']] = []
+                    after[all_messages[i]['from']] = []
                 for i in range(len(all_messages)):
-                    if all_messages[i]['from'] in d:
-                        d[all_messages[i]['from']].append({'message':all_messages[i]['message'], 'timestamp':all_messages[i]['timestamp']})
-                self._users = d
-                self.body.set_users(self._users)
+                    if all_messages[i]['from'] in after:
+                        after[all_messages[i]['from']].append({'message':all_messages[i]['message'], 'timestamp':all_messages[i]['timestamp']})
+            for keys in after:
+                if keys not in before:
+                    before[keys] = after[keys]
+                elif keys in before:
+                    before[keys] = after[keys]
+                    
+            self._users = before
+            self.body.set_users(self._users)
     
     """
     Call only once, upon initialization to add widgets to root frame
