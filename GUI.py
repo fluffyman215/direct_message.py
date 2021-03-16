@@ -228,22 +228,22 @@ class MainApp(tk.Frame):
             print('Message Unable To Send')
 
     def add_user(self):
-        new_user = tk.Toplevel()
-        new_user.geometry("300x100")
+        self.user_window = tk.Toplevel()
+        self.user_window.geometry("300x100")
         
-        title = tk.Label(new_user, text='LOGIN')
+        title = tk.Label(master=self.user_window, text='LOGIN')
         title.pack(fill='x', padx=5, pady=5)
 
-        self.msg_editor = tk.Text(master=new_user, height=0)
+        self.msg_editor = tk.Text(master=self.user_window, height=0)
         self.msg_editor.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True, padx=5, pady=5)
 
-        save_button = tk.Button(master=new_user, text="Add User", width=20)
+        save_button = tk.Button(master=self.user_window, text="Add User", width=20)
         save_button.configure(command=self.get_user_info)
-        save_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
+        save_button.pack(fill=tk.BOTH, side=tk.TOP, padx=5, pady=5)
 
     def get_user_info(self):
         self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
-        return self.msg_editor.get('1.0', 'end').rstrip()
+        self.user_window.destroy()
     
     def refresh_msg(self):
         if self.username != None:
