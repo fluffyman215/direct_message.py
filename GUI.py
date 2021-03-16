@@ -142,7 +142,9 @@ class Footer(tk.Frame):
     def add_click(self):
         if self._add_callback is not None:
             self._add_callback()
-
+     
+    def refresh(self):
+        pass
     
     """
     Call only once upon initialization to add widgets to the frame
@@ -154,6 +156,10 @@ class Footer(tk.Frame):
         send_button = tk.Button(master=footer_frame, text="Send", width=20)
         send_button.configure(command=self.send_click)
         send_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
+        
+        refresh_button = tk.Button(master=footer_frame, text="Refresh", width=20)
+        refresh_button.configure(command=self.send_click)
+        refresh_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
 
         add_button = tk.Button(master=footer_frame, text="Add User")
         add_button.configure(command=self.add_click)
