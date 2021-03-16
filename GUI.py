@@ -50,8 +50,6 @@ class Body(tk.Frame):
     NOTE: This method is useful for clearing the widget, just pass an empty string.
     """
     def set_text_entry(self, text:str):
-        # TODO: Write code to that deletes all current text in the self.msg_editor widget
-        # and inserts the value contained within the text parameter.
         self.msg_editor.delete(0.0, 'end')
         self.msg_editor.insert(0.0, text)
     
@@ -59,11 +57,6 @@ class Body(tk.Frame):
     Populates the self._posts attribute with posts from the active DSU file.
     """
     def set_users(self, dic:dict):
-        # TODO: Write code to populate self._posts with the post data passed
-        # in the posts parameter and repopulate the UI with the new post entries.
-        # HINT: You will have to write the delete code yourself, but you can take 
-        # advantage of the self.insert_posttree method for updating the posts_tree
-        # widget.
         self._users = dic
         o = 1
         for users in dic:
@@ -201,7 +194,6 @@ class MainApp(tk.Frame):
         self.password = '1223'
         self.token = 'user_token'
         
-
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the root frame
         self._draw()
@@ -220,7 +212,6 @@ class MainApp(tk.Frame):
 
     def send_message(self):
         dm = DirectMessenger(self.dsuserver,self.username, self.password)
-        #idk what to put for recipient right here yet
         resp = dm.send(self.body.get_text_entry(), self.body.recipient)
         if resp == 'ok':
             print('Message Sent Successful')
