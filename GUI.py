@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
+from ds_messenger import DirectMessenger
 
 """
 A subclass of tk.Frame that is responsible for drawing all of the widgets
@@ -189,7 +190,9 @@ class MainApp(tk.Frame):
         self.root.destroy()
 
     def send_message(self):
-        pass
+        dm = DirectMessenger()
+        #idk what to put for recipient right here yet
+        dm.send(self.body.get_text_entry(), recipient)
 
     def add_user(self):
         pass
