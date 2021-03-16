@@ -1,11 +1,15 @@
 import socket
 import ds_protocol
+from typing import TextIO
+import asyncio, time, json
+from collections import namedtuple
+
+port = 3021
 
 class DSConnection:
-    def __init__(self):
-        self.connection: socket = None
-        self.send: TextIO = None
-        self.recv: TextIO = None
+    connection: socket = None
+    send: TextIO = None
+    recv: TextIO = None
 
 
 class DirectMessage:
@@ -18,9 +22,9 @@ class DirectMessage:
 class DirectMessenger:
     def __init__(self, dsuserver=None, username=None, password=None):
         self.token = None
-        self.dsuserver = None
-        self.username = None
-        self.password = None
+        self.dsuserver = dsuserver
+        self.username = username
+        self.password = password
 
     def connection(self, server:str, port:int):
         try:
@@ -33,37 +37,36 @@ class DirectMessenger:
         except:
             return None
 
+    def join(self, ds_conn:DSConnection, username:str, password:str) -> str:
+      """
+      Takes in the parameter and uses the ds_protocol to make the join message.
+      Takes the join message and puts it into the write function to be written to the server.
+      """
+      j_msg = ds_protocol.joinmsg(username, password)
+      print(j_msg)
+      resp = self.write(ds_conn, j_msg)
+      print(resp)
+      return ds_protocol.extract_token(resp)
+
     def write(self, ds_conn:DSConnection, message:str):
         ds_conn.send.write(message + '\r\n')
         ds_conn.send.flush()
         resp = ds_conn.recv.readline()
 
         return resp
-    
-    def join_server(self, username, password, connect):
-        '''
-        Main purpose is to extract the token from the server.
-        '''
-        
-        join_str = ds_protocol.join(self.username, self.password)
-
-        joined = self.write(connect, join_str)
-
-        typ, token = ds_protocol.extract_response_typ(joined)
-
-        if typ == "ok":
-            self.token = token
 
     def send(self, message:str, recipient:str) -> bool:
         # returns true if message successfully sent, false if send failed.
-        connect = connection(self.dsuserver, port)
+        connect = self.connection(self.dsuserver, port)
         if connect == None:
             print('Unable to connect')
             return False
         else:
-            msg = ds_protocol.send_direct_message(self.token, message, recipient)
-            resp = self.write(msg)
+            self.token = self.join(connect, self.username, self.password)
+            msg = ds_protocol.send_directmessage(self.token, message, recipient)
+            resp = self.write(connect, msg)
             resps = ds_protocol.extract_response_typ(resp)
+            return resps
         if resps == 'ok':
             print('Direct Message Sent')
             return True
@@ -74,33 +77,37 @@ class DirectMessenger:
 
 
     def retrieve_new(self) -> list:
-        # returns a list of DirectMessage objects containing all new messages
-        new_msg = ds_protocol.request(messages(self.token, "new"))
-        messages = ds_protocol.extract_json_new(new_msg)
-        return messages.message
+        connect = self.connection(self.dsuserver, port)
+        # returns a list of DirectMessage objects containing all messages
+        if connect == None:
+            print('Unable to connect')
+            return None
+        else:
+            try:
+                self.token = self.join(connect, self.username, self.password)
+                new_msg = ds_protocol.request_messages(self.token,'new')
+                resp = self.write(connect, new_msg)
+                resps = ds_protocol.extract_response_typ(resp)
+                messages = ds_protocol.extract_json(resp)
+                return messages
+            except:
+                print('ERROR')
+                return None
 
     def retrieve_all(self) -> list:
+        connect = self.connection(self.dsuserver, port)
         # returns a list of DirectMessage objects containing all messages
-        new_msg = ds_protocol.request(messages(self.token, "new"))
-        messages = ds_protocol.extract_json_all(new_msg)
-        return messages.message
-
-    def send_request(self, new_msg):
-        '''
-        Extra send function to connect retrieve_new and retrieve_all functions.
-
-        new_msg will be the keywords associated to retrieve the desired information.
-        '''
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
-                client.connect(self.dsuserver, port)
-
-                send = client.makefile('w')
-                recv = client.makefile('r')
-
-                send.write(new_msg + '\r\n')
-                send.flush()
-
-                msg = recv.readline()
-        except:
-            print("ERROR")
+        if connect == None:
+            print('Unable to connect')
+            return None
+        else:
+            try:
+                self.token = self.join(connect, self.username, self.password)
+                new_msg = ds_protocol.request_messages(self.token,'all')
+                resp = self.write(connect, new_msg)
+                resps = ds_protocol.extract_response_typ(resp)
+                messages = ds_protocol.extract_json(resp)
+                return messages
+            except:
+                print('ERROR')
+                return None
