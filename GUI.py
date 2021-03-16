@@ -10,23 +10,34 @@ class Body(tk.Frame):
     def __init__(self, root):
         tk.Frame.__init__(self, root)
         self.root = root
-
+        self.recipient = None
         # a list of the User objects available in the active DSU file
-        self._users = []
+        self._users = {}
         
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the Body instance 
         self._draw()
         self.msg_view.config(state='disabled')
+
     
     """
     Update the msg_editor with the full post entry when the corresponding node in the posts_tree
     is selected.
     """
     def node_select(self, event):
-        index = int(self.users_tree.selection()[0])-1 #selections are not 0-based, so subtract one.
-        entry = self._users[index].entry
-        self.set_text_entry(entry)
+        index = int(self.user_tree.selection()[0])-2#selections are not 0-based, so subtract one.
+        l = list(self._users)
+        user = l[index]
+        entry = ''
+        self.recipient = user
+        for users in self._users:
+            if users == user:
+                for i in range(len(self._users[user])):
+                    entry = entry + '{} @ {}'.format(self._users[user][i]['message'], self._users[user][i]['timestamp']) + '\n'
+        self.msg_view.config(state='normal')
+        self.msg_view.delete(0.0, 'end')
+        self.msg_view.insert(0.0, entry)
+        self.msg_view.config(state='disabled')
     
     """
     Returns the text that is currently displayed in the msg_editor widget.
@@ -47,24 +58,31 @@ class Body(tk.Frame):
     """
     Populates the self._posts attribute with posts from the active DSU file.
     """
-    def set_users(self, posts:list):
+    def set_users(self, dic:dict):
         # TODO: Write code to populate self._posts with the post data passed
         # in the posts parameter and repopulate the UI with the new post entries.
         # HINT: You will have to write the delete code yourself, but you can take 
         # advantage of the self.insert_posttree method for updating the posts_tree
         # widget.
-        self._users = posts[:]
-        count = 1
-        for user in self._users:
-            self._insert_user_tree(count, post)
-            count += 1
+        self._users = dic
+        o = 1
+        for users in dic:
+            o += 1
+            entry = ''
+            for i in range(len(dic[users])):
+                entry = entry + '{} @ {}'.format(dic[users][i]['message'], dic[users][i]['timestamp']) + '\n'
+            self._insert_user_tree(o, users)
 
     """
     Inserts a single user to the user_tree widget.
     """
-    def insert_user(self, post:list):
-        self._users.append(post)
-        self._insert_user_tree(len(self._users), post)
+    def insert_user(self, user):
+        self._users[user] = []
+        d = self._users.copy()
+        self.reset_ui()
+        self._users = d
+        self.set_users(d)
+        self._insert_user_tree(len(self._users)+2, '')
 
     """
     Resets all UI widgets to their default state. Useful for when clearing the UI is neccessary such
@@ -72,21 +90,20 @@ class Body(tk.Frame):
     """
     def reset_ui(self):
         self.set_text_entry("")
-        self._users = []
-        for item in self.users_tree.get_children():
-            self.users_tree.delete(item)
+        self._users = {}
+        for item in self.user_tree.get_children():
+            self.user_tree.delete(item)
 
     """
     Inserts a post entry into the posts_tree widget.
     """
-    def _insert_user_tree(self, id, post:list):
-        entry = post.entry
+    def _insert_user_tree(self, num, message):
+        """entry = post.entry
         # Since we don't have a title, we will use the first 24 characters of a
         # post entry as the identifier in the user_tree widget.
         if len(entry) > 25:
-            entry = entry[:24] + "..."
-        
-        self.users_tree.insert('', id, id, text=entry)
+            entry = entry[:24] + "..."""
+        self.user_tree.insert('', num, num, text=message)
     
     """
     Call only once upon initialization to add widgets to the frame
@@ -178,6 +195,12 @@ class MainApp(tk.Frame):
         tk.Frame.__init__(self, root)
         self.root = root
         self.user = None
+        self.dsuserver = '168.235.86.101'
+        self.port = 3021
+        self.username = "defaultusername"
+        self.password = '1223'
+        self.token = 'user_token'
+        
 
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the root frame
@@ -186,19 +209,23 @@ class MainApp(tk.Frame):
     """
     Closes the program when the 'Close' menu item is clicked.
     """
-    #def boot_screen(self):
-        #login_window = tk.Toplevel()
+    def boot_screen(self):
+        login_window = tk.Toplevel()
         
-        #title = tk.Label(login_window, text='LOGIN')
-        #title.pack(fill='x', padx=5, pady=5)
+        title = tk.Label(login_window, text='LOGIN')
+        title.pack(fill='x', padx=5, pady=5)
     
     def close(self):
         self.root.destroy()
 
     def send_message(self):
-        dm = DirectMessenger()
+        dm = DirectMessenger(self.dsuserver,self.username, self.password)
         #idk what to put for recipient right here yet
-        dm.send(self.body.get_text_entry(), recipient)
+        resp = dm.send(self.body.get_text_entry(), self.body.recipient)
+        if resp == 'ok':
+            print('Message Sent Successful')
+        else:
+            print('Message Unable To Send')
 
     def add_user(self):
         new_user = tk.Toplevel()
@@ -213,12 +240,25 @@ class MainApp(tk.Frame):
         save_button = tk.Button(master=new_user, text="Add User", width=20)
         save_button.configure(command=self.get_user_info)
         save_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
-        
+
     def get_user_info(self):
+        self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
         return self.msg_editor.get('1.0', 'end').rstrip()
     
     def refresh_msg(self):
-        pass
+        if self.username != None:
+            dm = DirectMessenger(self.dsuserver,self.username,self.password)
+            all_messages = dm.retrieve_all()
+            self.body.reset_ui()
+            d = {}
+            if len(all_messages) != 0:
+                for i in range(len(all_messages)):
+                    d[all_messages[i]['from']] = []
+                for i in range(len(all_messages)):
+                    if all_messages[i]['from'] in d:
+                        d[all_messages[i]['from']].append({'message':all_messages[i]['message'], 'timestamp':all_messages[i]['timestamp']})
+                self._users = d
+                self.body.set_users(self._users)
     
     """
     Call only once, upon initialization to add widgets to root frame
