@@ -186,6 +186,12 @@ class MainApp(tk.Frame):
     """
     Closes the program when the 'Close' menu item is clicked.
     """
+    def boot_screen(self):
+        login_window = tk.Toplevel()
+        
+        title = tk.Label(login_window, text='LOGIN')
+        title.pack(fill='x', padx=5, pady=5)
+    
     def close(self):
         self.root.destroy()
 
