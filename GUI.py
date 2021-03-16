@@ -39,7 +39,8 @@ class Body(tk.Frame):
     def set_text_entry(self, text:str):
         # TODO: Write code to that deletes all current text in the self.msg_editor widget
         # and inserts the value contained within the text parameter.
-        pass
+        self.msg_editor.delete(0.0, 'end')
+        self.msg_editor.insert(0.0, text)
     
     """
     Populates the self._posts attribute with posts from the active DSU file.
@@ -50,7 +51,11 @@ class Body(tk.Frame):
         # HINT: You will have to write the delete code yourself, but you can take 
         # advantage of the self.insert_posttree method for updating the posts_tree
         # widget.
-        pass
+        self._posts = posts[:]
+        count = 1
+        for post in self._posts:
+            self._insert_post_tree(count, post)
+            count += 1
 
     """
     Inserts a single post to the post_tree widget.
