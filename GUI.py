@@ -121,11 +121,12 @@ A subclass of tk.Frame that is responsible for drawing all of the widgets
 in the footer portion of the root frame.
 """
 class Footer(tk.Frame):
-    def __init__(self, root, send_callback=None, add_callback=None):
+    def __init__(self, root, send_callback=None, add_callback=None, refresh_callback=None):
         tk.Frame.__init__(self, root)
         self.root = root
         self._send_callback = send_callback
         self._add_callback = add_callback
+        self._refresh_callback = refresh_callback
         
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the Footer instance 
@@ -144,7 +145,8 @@ class Footer(tk.Frame):
             self._add_callback()
      
     def refresh(self):
-        pass
+        if self._refresh_callback is not None:
+            self._refresh_callback()
     
     """
     Call only once upon initialization to add widgets to the frame
@@ -174,6 +176,7 @@ class MainApp(tk.Frame):
     def __init__(self, root):
         tk.Frame.__init__(self, root)
         self.root = root
+        self.user = None
 
         # After all initialization is complete, call the _draw method to pack the widgets
         # into the root frame
@@ -190,6 +193,9 @@ class MainApp(tk.Frame):
 
     def add_user(self):
         pass
+    
+    def refresh_msg(self):
+        if self.user != None:
     
     """
     Call only once, upon initialization to add widgets to root frame
@@ -213,7 +219,7 @@ class MainApp(tk.Frame):
         # TODO: Add a callback for detecting changes to the online checkbox widget in the Footer class. Follow
         # the conventions established by the existing save_callback parameter.
         # HINT: There may already be a class method that serves as a good callback function!
-        self.footer = Footer(self.root, send_callback=self.send_message, add_callback=self.add_user)
+        self.footer = Footer(self.root, send_callback=self.send_message, add_callback=self.add_user, refresh_callback=self.refresh_msg)
         self.footer.pack(fill=tk.BOTH, side=tk.BOTTOM)
 
 if __name__ == "__main__":
