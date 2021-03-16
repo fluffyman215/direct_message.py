@@ -109,12 +109,12 @@ class Body(tk.Frame):
         self.msg_editor = tk.Text(master=entry_frame, height=0)
         self.msg_editor.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True, padx=5, pady=5)
 
-        scroll_frame = tk.Frame(master=entry_frame, bg="blue", width=10)
-        scroll_frame.pack(fill=tk.BOTH, side=tk.LEFT, expand=False)
+        #scroll_frame = tk.Frame(master=entry_frame, bg="blue", width=10)
+        #scroll_frame.pack(fill=tk.BOTH, side=tk.LEFT, expand=False)
 
-        msg_editor_scrollbar = tk.Scrollbar(master=scroll_frame, command=self.msg_editor.yview)
-        self.msg_editor['yscrollcommand'] = msg_editor_scrollbar.set
-        msg_editor_scrollbar.pack(fill=tk.Y, side=tk.LEFT, expand=False, padx=0, pady=0)
+        #msg_editor_scrollbar = tk.Scrollbar(master=scroll_frame, command=self.msg_editor.yview)
+        #self.msg_editor['yscrollcommand'] = msg_editor_scrollbar.set
+        #msg_editor_scrollbar.pack(fill=tk.Y, side=tk.LEFT, expand=False, padx=0, pady=0)
 
 """
 A subclass of tk.Frame that is responsible for drawing all of the widgets
