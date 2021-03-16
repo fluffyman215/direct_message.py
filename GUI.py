@@ -204,7 +204,7 @@ class MainApp(tk.Frame):
         pass
     
     def refresh_msg(self):
-        if self.user != None:
+        pass
     
     """
     Call only once, upon initialization to add widgets to root frame
