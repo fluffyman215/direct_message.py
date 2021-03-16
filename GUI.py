@@ -158,7 +158,7 @@ class Footer(tk.Frame):
         send_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
         
         refresh_button = tk.Button(master=footer_frame, text="Refresh", width=20)
-        refresh_button.configure(command=self.send_click)
+        refresh_button.configure(command=self.refresh)
         refresh_button.pack(fill=tk.BOTH, side=tk.RIGHT, padx=5, pady=5)
 
         add_button = tk.Button(master=footer_frame, text="Add User")
