@@ -210,11 +210,15 @@ class MainApp(tk.Frame):
     Call only once, upon initialization to add widgets to root frame
     """
     def _draw(self):
-        # Build a menu and add it to the root frame.
+        # Build a menu and add it to the root frame
+        
         menu_bar = tk.Menu(self.root)
         self.root['menu'] = menu_bar
         menu_file = tk.Menu(menu_bar)
+        
         menu_bar.add_cascade(menu=menu_file, label='Click')
+        
+        menu_file.add_command(label='Login', command=self.boot_screen)
         menu_file.add_command(label='Close', command=self.close)
         # NOTE: Additional menu items can be added by following the conventions here.
         # The only top level menu item is a 'cascading menu', that presents a small menu of
