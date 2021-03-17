@@ -4,10 +4,10 @@ from collections import namedtuple
 DataTuple = namedtuple('DataTuple', ['type','message'])
 
 
-def send_directmessage(user_token, msg, recipient):
+def send_directmessage(user_token, msg, recipient, time):
     """Converts the send message into a json string."""
 
-    json_directmessage = json.dumps({"token":user_token, "directmessage": {"entry": msg,"recipient": recipient, "timestamp": str(time.time())}})
+    json_directmessage = json.dumps({"token":user_token, "directmessage": {"entry": msg,"recipient": recipient, "timestamp": time}})
     
     return json_directmessage
 
