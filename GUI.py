@@ -18,11 +18,11 @@ class Body(tk.Frame):
 
     
     """
-    Update the msg_editor with the full post entry when the corresponding node in the posts_tree
+    Update the msg_editor with the full post entry when the corresponding node in the user_tree
     is selected.
     """
     def node_select(self, event):
-        index = int(self.user_tree.selection()[0])-2#selections are not 0-based, so subtract one.
+        index = int(self.user_tree.selection()[0])-2 #selections are not 0-based, so subtract one.
         l = list(self._users)
         user = l[index]
         entry = ''
@@ -44,15 +44,12 @@ class Body(tk.Frame):
 
     """
     Sets the text to be displayed in the msg_editor widget.
-    NOTE: This method is useful for clearing the widget, just pass an empty string.
     """
     def set_text_entry(self, text:str):
         self.msg_editor.delete(0.0, 'end')
         self.msg_editor.insert(0.0, text)
     
-    """
-    Populates the self._posts attribute with posts from the active DSU file.
-    """
+
     def set_users(self, dic:dict):
         self._users = dic
         o = 1
@@ -75,8 +72,7 @@ class Body(tk.Frame):
         self._insert_user_tree(len(self._users)+2, '')
 
     """
-    Resets all UI widgets to their default state. Useful for when clearing the UI is neccessary such
-    as when a new DSU file is loaded, for example.
+    Resets all UI widgets to their default state.
     """
     def reset_ui(self):
         self.set_text_entry("")
@@ -85,7 +81,7 @@ class Body(tk.Frame):
             self.user_tree.delete(item)
 
     """
-    Inserts a post entry into the posts_tree widget.
+    Inserts a user entry into the user_tree widget.
     """
     def _insert_user_tree(self, num, message):
         """entry = post.entry
@@ -139,10 +135,18 @@ class Footer(tk.Frame):
         if self._send_callback is not None:
             self._send_callback()
 
+    """
+    Calls the callback function specified in the add_callback class attribute, if
+    available, when the add_button has been clicked.
+    """
     def add_click(self):
         if self._add_callback is not None:
             self._add_callback()
-     
+
+    """
+    Calls the callback function specified in the refresh_callback class attribute, if
+    available, when the refresh_button has been clicked.
+    """ 
     def refresh(self):
         if self._refresh_callback is not None:
             self._refresh_callback()
@@ -183,19 +187,24 @@ class MainApp(tk.Frame):
         self.token = 'user_token'
 
         self._draw()
+
     
-    """
-    Closes the program when the 'Close' menu item is clicked.
-    """
     def boot_screen(self):
         login_window = tk.Toplevel()
         
         title = tk.Label(login_window, text='LOGIN')
         title.pack(fill='x', padx=5, pady=5)
-    
+
+    """
+    Closes the program when the 'Close' menu item is clicked.
+    """
     def close(self):
         self.root.destroy()
 
+    
+    """
+    Sends the written message to the server when the 'Send' button is clicked.
+    """
     def send_message(self):
         dm = DirectMessenger(self.dsuserver,self.username, self.password)
         resp = dm.send(self.body.get_text_entry(), self.body.recipient)
@@ -204,6 +213,9 @@ class MainApp(tk.Frame):
         else:
             print('Message Unable To Send')
 
+    """
+    Creates a new Toplevel window so that a user can add a new user.
+    """
     def add_user(self):
         self.user_window = tk.Toplevel()
         self.user_window.geometry("300x100")
@@ -218,6 +230,9 @@ class MainApp(tk.Frame):
         save_button.configure(command=self.get_user_info)
         save_button.pack(fill=tk.BOTH, side=tk.TOP, padx=5, pady=5)
 
+    """
+    Gets the username inputted from add_user and adds it onto the user_tree.
+    """
     def get_user_info(self):
         self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
         self.body.recipient = self.msg_editor.get('1.0', 'end').rstrip()
@@ -281,4 +296,3 @@ if __name__ == "__main__":
     main.minsize(main.winfo_width(), main.winfo_height())
 
     main.mainloop()
-
