@@ -11,11 +11,8 @@ class Body(tk.Frame):
         tk.Frame.__init__(self, root)
         self.root = root
         self.recipient = None
-        # a list of the User objects available in the active DSU file
         self._users = {}
-        
-        # After all initialization is complete, call the _draw method to pack the widgets
-        # into the Body instance 
+      
         self._draw()
         self.msg_view.config(state='disabled')
 
@@ -120,13 +117,6 @@ class Body(tk.Frame):
         self.msg_editor = tk.Text(master=entry_frame, height=0)
         self.msg_editor.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True, padx=5, pady=5)
 
-        #scroll_frame = tk.Frame(master=entry_frame, bg="blue", width=10)
-        #scroll_frame.pack(fill=tk.BOTH, side=tk.LEFT, expand=False)
-
-        #msg_editor_scrollbar = tk.Scrollbar(master=scroll_frame, command=self.msg_editor.yview)
-        #self.msg_editor['yscrollcommand'] = msg_editor_scrollbar.set
-        #msg_editor_scrollbar.pack(fill=tk.Y, side=tk.LEFT, expand=False, padx=0, pady=0)
-
 """
 A subclass of tk.Frame that is responsible for drawing all of the widgets
 in the footer portion of the root frame.
@@ -139,8 +129,6 @@ class Footer(tk.Frame):
         self._add_callback = add_callback
         self._refresh_callback = refresh_callback
         
-        # After all initialization is complete, call the _draw method to pack the widgets
-        # into the Footer instance 
         self._draw()
 
     """
@@ -193,9 +181,7 @@ class MainApp(tk.Frame):
         self.username = "defaultusername"
         self.password = '1223'
         self.token = 'user_token'
-        
-        # After all initialization is complete, call the _draw method to pack the widgets
-        # into the root frame
+
         self._draw()
     
     """
@@ -263,7 +249,6 @@ class MainApp(tk.Frame):
     Call only once, upon initialization to add widgets to root frame
     """
     def _draw(self):
-        # Build a menu and add it to the root frame
         
         menu_bar = tk.Menu(self.root)
         self.root['menu'] = menu_bar
@@ -273,18 +258,10 @@ class MainApp(tk.Frame):
         
         menu_file.add_command(label='Login', command=self.boot_screen)
         menu_file.add_command(label='Close', command=self.close)
-        # NOTE: Additional menu items can be added by following the conventions here.
-        # The only top level menu item is a 'cascading menu', that presents a small menu of
-        # command items when clicked. But there are others. A single button or checkbox, for example,
-        # could also be added to the menu bar. 
 
-        # The Body and Footer classes must be initialized and packed into the root window.
         self.body = Body(self.root)
         self.body.pack(fill=tk.BOTH, side=tk.TOP, expand=True)
         
-        # TODO: Add a callback for detecting changes to the online checkbox widget in the Footer class. Follow
-        # the conventions established by the existing save_callback parameter.
-        # HINT: There may already be a class method that serves as a good callback function!
         self.footer = Footer(self.root, send_callback=self.send_message, add_callback=self.add_user, refresh_callback=self.refresh_msg)
         self.footer.pack(fill=tk.BOTH, side=tk.BOTTOM)
 
@@ -299,13 +276,9 @@ if __name__ == "__main__":
 
     MainApp(main)
 
-    # When update is called, we finalize the states of all widgets that have been configured within the root frame.
-    # Here, Update ensures that we get an accurate width and height reading based on the types of widgets
-    # we have used.
-    # minsize prevents the root window from resizing too small. Feel free to comment it out and see how
-    # the resizing behavior of the window changes.
     main.update()
+    
     main.minsize(main.winfo_width(), main.winfo_height())
-    # And finally, start up the event loop for the program (more on this in lecture).
+
     main.mainloop()
 
