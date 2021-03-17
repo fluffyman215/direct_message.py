@@ -22,7 +22,7 @@ def request_messages(user_token, msg):
     return json_request
 
 """
-Call the json.loads function on a json string and convert it to a DataTuple object
+Call the json.loads function on a json string and convert it to a DataTuple object and returns json message.
 """
 def extract_json(json_msg:str) -> DataTuple:
     try:
