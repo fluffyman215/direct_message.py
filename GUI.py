@@ -265,7 +265,7 @@ class MainApp(tk.Frame):
         
         menu_bar.add_cascade(menu=menu_file, label='Click')
         
-        menu_file.add_command(label='Login', command=self.boot_screen)
+
         menu_file.add_command(label='Close', command=self.close)
 
         self.body = Body(self.root)
