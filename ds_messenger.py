@@ -69,20 +69,19 @@ class DirectMessenger:
         return resp
 
     def send(self, message:str, recipient:str) -> bool:
-        """
-        Sends the direct message to the specified recipient.
-        Returns true if message successfully sent, false if send failed.
-        """
-        
+        # returns true if message successfully sent, false if send failed.
         connect = self.connection(self.dsuserver, port)
-
+        dm = DirectMessage()
+        dm.recipient = recipient
+        dm.message = message
+        dm.timestamp = str(time.time())
         try:
             if connect == None:
                 raise ConnectionException()
                 return False
             else:
                 self.token = self.join(connect, self.username, self.password)
-                msg = ds_protocol.send_directmessage(self.token, message, recipient)
+                msg = ds_protocol.send_directmessage(self.token, dm.message, dm.recipient, dm.timestamp)
                 resp = self.write(connect, msg)
                 resps = ds_protocol.extract_response_typ(resp)
                 return resps
@@ -91,14 +90,15 @@ class DirectMessenger:
                 return True
             else:
                 raise MessengerException()
-                
                 return False
         
         except ConnectionException:
             print("Cannot Connect. Please Check Connection")
+            return False
+        
         except MessengerException:
             print('Direct Message Unable to be Sent')
-            
+            return False
 
 
     def retrieve_new(self) -> list:
