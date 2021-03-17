@@ -45,6 +45,7 @@ class Body(tk.Frame):
     
 
     def set_users(self, dic:dict):
+        """Set users in the tree and have the messages in a dictionary format."""
         self._users = dic
         o = 1
         for users in dic:
@@ -74,10 +75,7 @@ class Body(tk.Frame):
 
     def _insert_user_tree(self, num, message):
         """Inserts a user entry into the user_tree widget."""
-        
-        #entry = post.entry
-        #if len(entry) > 25:
-            #entry = entry[:24] + "..."
+
         self.user_tree.insert('', num, num, text=message)
     
     def _draw(self):
@@ -161,13 +159,6 @@ class MainApp(tk.Frame):
 
         self._draw()
 
-    
-    def boot_screen(self):
-        login_window = tk.Toplevel()
-        
-        title = tk.Label(login_window, text='LOGIN')
-        title.pack(fill='x', padx=5, pady=5)
-
     def close(self):
         """Closes the program when the 'Close' menu item is clicked."""
         
@@ -201,13 +192,14 @@ class MainApp(tk.Frame):
         save_button.pack(fill=tk.BOTH, side=tk.TOP, padx=5, pady=5)
 
     def get_user_info(self):
-         """Gets the username inputted from add_user and adds it onto the user_tree."""
+        """Gets the username inputted from add_user and adds it onto the user_tree."""
          
         self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
         self.body.recipient = self.msg_editor.get('1.0', 'end').rstrip()
         self.user_window.destroy()
     
     def refresh_msg(self):
+        """Take in retrieve_new information and replace what was in it before."""
         if self.username != None:
             dm = DirectMessenger(self.dsuserver,self.username,self.password)
             all_messages = dm.retrieve_all()
@@ -238,7 +230,6 @@ class MainApp(tk.Frame):
         
         menu_bar.add_cascade(menu=menu_file, label='Click')
         
-        menu_file.add_command(label='Login', command=self.boot_screen)
         menu_file.add_command(label='Close', command=self.close)
 
         self.body = Body(self.root)
