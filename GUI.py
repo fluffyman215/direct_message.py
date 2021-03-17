@@ -188,12 +188,6 @@ class MainApp(tk.Frame):
 
         self._draw()
 
-    
-    def boot_screen(self):
-        login_window = tk.Toplevel()
-        
-        title = tk.Label(login_window, text='LOGIN')
-        title.pack(fill='x', padx=5, pady=5)
 
     """
     Closes the program when the 'Close' menu item is clicked.
