@@ -7,11 +7,11 @@ from collections import namedtuple
 port = 3021
 
 class MessengerException(Exception):
-    '''Raised when message fails to send.'''
+    """Raised when message fails to send."""
     pass
 
 class ConnectionException(Exception):
-    '''Raised when connection is not established etc.'''
+    """Raised when connection is not established etc."""
     pass
 
 class DSConnection:
@@ -35,6 +35,8 @@ class DirectMessenger:
         self.password = password
 
     def connection(self, server:str, port:int):
+        """Establishes a connection to the server so messages can be sent."""
+        
         try:
             ds_conn = DSConnection()
             ds_conn.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -50,6 +52,7 @@ class DirectMessenger:
       Takes in the parameter and uses the ds_protocol to make the join message.
       Takes the join message and puts it into the write function to be written to the server.
       """
+      
       j_msg = ds_protocol.joinmsg(username, password)
       
       resp = self.write(ds_conn, j_msg)
@@ -57,6 +60,8 @@ class DirectMessenger:
       return ds_protocol.extract_token(resp)
 
     def write(self, ds_conn:DSConnection, message:str):
+        """Sends the message to the server."""
+        
         ds_conn.send.write(message + '\r\n')
         ds_conn.send.flush()
         resp = ds_conn.recv.readline()
@@ -64,7 +69,11 @@ class DirectMessenger:
         return resp
 
     def send(self, message:str, recipient:str) -> bool:
-        # returns true if message successfully sent, false if send failed.
+        """
+        Sends the direct message to the specified recipient.
+        Returns true if message successfully sent, false if send failed.
+        """
+        
         connect = self.connection(self.dsuserver, port)
 
         try:
@@ -93,8 +102,10 @@ class DirectMessenger:
 
 
     def retrieve_new(self) -> list:
+        """Returns a list of DirectMessage objects containing all messages."""
+        
         connect = self.connection(self.dsuserver, port)
-        # returns a list of DirectMessage objects containing all messages
+        
         try:
             if connect == None:
                 raise ConnectionException()
@@ -114,9 +125,12 @@ class DirectMessenger:
                     return None
         except ConnectionException:
             print("Connection Error")
+
+
     def retrieve_all(self) -> list:
+        """Returns a list of DirectMessage objects containing all messages"""
         connect = self.connection(self.dsuserver, port)
-        # returns a list of DirectMessage objects containing all messages
+        
         try:
             if connect == None:
                 raise ConnectionException()
