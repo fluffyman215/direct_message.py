@@ -2,11 +2,10 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 from ds_messenger import DirectMessenger
 
-"""
-A subclass of tk.Frame that is responsible for drawing all of the widgets
-in the body portion of the root frame.
-"""
+
 class Body(tk.Frame):
+    """A subclass of tk.Frame that is responsible for drawing all of the widgets in the body portion of the root frame."""
+    
     def __init__(self, root):
         tk.Frame.__init__(self, root)
         self.root = root
@@ -16,12 +15,9 @@ class Body(tk.Frame):
         self._draw()
         self.msg_view.config(state='disabled')
 
-    
-    """
-    Update the msg_editor with the full post entry when the corresponding node in the user_tree
-    is selected.
-    """
     def node_select(self, event):
+        """Update the msg_editor with the full post entry when the corresponding node in the user_tree is selected."""
+        
         index = int(self.user_tree.selection()[0])-2 #selections are not 0-based, so subtract one.
         l = list(self._users)
         user = l[index]
@@ -36,16 +32,14 @@ class Body(tk.Frame):
         self.msg_view.insert(0.0, entry)
         self.msg_view.config(state='disabled')
     
-    """
-    Returns the text that is currently displayed in the msg_editor widget.
-    """
     def get_text_entry(self) -> str:
+        """Returns the text that is currently displayed in the msg_editor widget."""
+        
         return self.msg_editor.get('1.0', 'end').rstrip()
 
-    """
-    Sets the text to be displayed in the msg_editor widget.
-    """
     def set_text_entry(self, text:str):
+        """Sets the text to be displayed in the msg_editor widget."""
+        
         self.msg_editor.delete(0.0, 'end')
         self.msg_editor.insert(0.0, text)
     
@@ -60,10 +54,9 @@ class Body(tk.Frame):
                 entry = entry + '{} @ {}'.format(dic[users][i]['message'], dic[users][i]['timestamp']) + '\n'
             self._insert_user_tree(o, users)
 
-    """
-    Inserts a single user to the user_tree widget.
-    """
     def insert_user(self, user):
+        """Inserts a single user to the user_tree widget."""
+        
         self._users[user] = []
         d = self._users.copy()
         self.reset_ui()
@@ -71,30 +64,25 @@ class Body(tk.Frame):
         self.set_users(d)
         self._insert_user_tree(len(self._users)+2, '')
 
-    """
-    Resets all UI widgets to their default state.
-    """
     def reset_ui(self):
+        """Resets all UI widgets to their default state."""
+        
         self.set_text_entry("")
         self._users = {}
         for item in self.user_tree.get_children():
             self.user_tree.delete(item)
 
-    """
-    Inserts a user entry into the user_tree widget.
-    """
     def _insert_user_tree(self, num, message):
-        """entry = post.entry
-        # Since we don't have a title, we will use the first 24 characters of a
-        # post entry as the identifier in the user_tree widget.
-        if len(entry) > 25:
-            entry = entry[:24] + "..."""
+        """Inserts a user entry into the user_tree widget."""
+        
+        #entry = post.entry
+        #if len(entry) > 25:
+            #entry = entry[:24] + "..."
         self.user_tree.insert('', num, num, text=message)
     
-    """
-    Call only once upon initialization to add widgets to the frame
-    """
     def _draw(self):
+        """Call only once upon initialization to add widgets to the frame"""
+        
         user_frame = tk.Frame(master=self, width=250, bg="gray")
         user_frame.pack(fill=tk.BOTH, side=tk.LEFT)
         self.user_tree = ttk.Treeview(user_frame)
@@ -113,11 +101,9 @@ class Body(tk.Frame):
         self.msg_editor = tk.Text(master=entry_frame, height=0)
         self.msg_editor.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True, padx=5, pady=5)
 
-"""
-A subclass of tk.Frame that is responsible for drawing all of the widgets
-in the footer portion of the root frame.
-"""
 class Footer(tk.Frame):
+    """A subclass of tk.Frame that is responsible for drawing all of the widgets in the footer portion of the root frame."""
+
     def __init__(self, root, send_callback=None, add_callback=None, refresh_callback=None):
         tk.Frame.__init__(self, root)
         self.root = root
@@ -127,34 +113,25 @@ class Footer(tk.Frame):
         
         self._draw()
 
-    """
-    Calls the callback function specified in the save_callback class attribute, if
-    available, when the save_button has been clicked.
-    """
     def send_click(self):
+        """Calls the callback function specified in the save_callback class attribute, if available, when the save_button has been clicked."""
+        
         if self._send_callback is not None:
             self._send_callback()
 
-    """
-    Calls the callback function specified in the add_callback class attribute, if
-    available, when the add_button has been clicked.
-    """
     def add_click(self):
+        """Calls the callback function specified in the add_callback class attribute, if available, when the add_button has been clicked."""
         if self._add_callback is not None:
             self._add_callback()
-
-    """
-    Calls the callback function specified in the refresh_callback class attribute, if
-    available, when the refresh_button has been clicked.
-    """ 
+            
     def refresh(self):
+        """Calls the callback function specified in the refresh_callback class attribute, if available, when the refresh_button has been clicked.""" 
         if self._refresh_callback is not None:
             self._refresh_callback()
     
-    """
-    Call only once upon initialization to add widgets to the frame
-    """
     def _draw(self):
+        """Call only once upon initialization to add widgets to the frame"""
+        
         footer_frame = tk.Frame(master=self, bg="gray")
         footer_frame.pack(fill=tk.BOTH, side=tk.BOTTOM)
         
@@ -170,12 +147,8 @@ class Footer(tk.Frame):
         add_button.configure(command=self.add_click)
         add_button.pack(fill=tk.BOTH, side=tk.LEFT, padx=5, pady=5)
 
-"""
-A subclass of tk.Frame that is responsible for drawing all of the widgets
-in the main portion of the root frame. Also manages all method calls for
-the NaClProfile class.
-"""
 class MainApp(tk.Frame):
+    """A subclass of tk.Frame that is responsible for drawing all of the widgets in the main portion of the root frame. Also manages all method calls for the NaClProfile class."""
     def __init__(self, root):
         tk.Frame.__init__(self, root)
         self.root = root
@@ -188,18 +161,22 @@ class MainApp(tk.Frame):
 
         self._draw()
 
+    
+    def boot_screen(self):
+        login_window = tk.Toplevel()
+        
+        title = tk.Label(login_window, text='LOGIN')
+        title.pack(fill='x', padx=5, pady=5)
 
-    """
-    Closes the program when the 'Close' menu item is clicked.
-    """
     def close(self):
+        """Closes the program when the 'Close' menu item is clicked."""
+        
         self.root.destroy()
 
     
-    """
-    Sends the written message to the server when the 'Send' button is clicked.
-    """
     def send_message(self):
+        """Sends the written message to the server when the 'Send' button is clicked."""
+        
         dm = DirectMessenger(self.dsuserver,self.username, self.password)
         resp = dm.send(self.body.get_text_entry(), self.body.recipient)
         if resp == 'ok':
@@ -207,10 +184,9 @@ class MainApp(tk.Frame):
         else:
             print('Message Unable To Send')
 
-    """
-    Creates a new Toplevel window so that a user can add a new user.
-    """
     def add_user(self):
+        """Creates a new Toplevel window so that a user can add a new user."""
+        
         self.user_window = tk.Toplevel()
         self.user_window.geometry("300x100")
         
@@ -224,10 +200,9 @@ class MainApp(tk.Frame):
         save_button.configure(command=self.get_user_info)
         save_button.pack(fill=tk.BOTH, side=tk.TOP, padx=5, pady=5)
 
-    """
-    Gets the username inputted from add_user and adds it onto the user_tree.
-    """
     def get_user_info(self):
+         """Gets the username inputted from add_user and adds it onto the user_tree."""
+         
         self.body.insert_user(self.msg_editor.get('1.0', 'end').rstrip())
         self.body.recipient = self.msg_editor.get('1.0', 'end').rstrip()
         self.user_window.destroy()
@@ -254,10 +229,8 @@ class MainApp(tk.Frame):
             self._users = before
             self.body.set_users(self._users)
     
-    """
-    Call only once, upon initialization to add widgets to root frame
-    """
     def _draw(self):
+        """Call only once, upon initialization to add widgets to root frame"""
         
         menu_bar = tk.Menu(self.root)
         self.root['menu'] = menu_bar
@@ -265,7 +238,7 @@ class MainApp(tk.Frame):
         
         menu_bar.add_cascade(menu=menu_file, label='Click')
         
-
+        menu_file.add_command(label='Login', command=self.boot_screen)
         menu_file.add_command(label='Close', command=self.close)
 
         self.body = Body(self.root)
