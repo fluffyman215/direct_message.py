@@ -10,10 +10,9 @@ The GUI.py file is the graphical interface of our project. The GUI takes use of 
 
 The GUI contains 3 classes: Body, Footer, and MainApp. The MainApp class is the hub for all functions for the buttons in the Footer class. These include the main functionality for the Add User, Refresh, and the Send button. The Footer class connects the functionality of the functions in the MainApp to the GUI. Finally, the Body class manages the text and the inputs from user in response to interactions with the buttons and the text editor.
 
-
-The following file contains the shell for sending and storing user data:
-
 ds_messenger.py
+
+The file contains the shell for sending and storing user data.
 
 NOTE: The framework of this code was provided by Professor Baldwin of ICS 32.
 
