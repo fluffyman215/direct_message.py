@@ -150,7 +150,7 @@ class DirectMessenger:
             else:
                 try:
                     self.token = self.join(connect, self.username, self.password)
-                    if token != None:
+                    if self.token != None:
                         new_msg = ds_protocol.request_messages(self.token,'new')
                         resp = self.write(connect, new_msg)
                         resps = ds_protocol.extract_response_typ(resp)
@@ -181,11 +181,12 @@ class DirectMessenger:
             else:
                 try:
                     self.token = self.join(connect, self.username, self.password)
-                    if token != None:
+                    if self.token != None:
                         new_msg = ds_protocol.request_messages(self.token,'all')
                         resp = self.write(connect, new_msg)
                         resps = ds_protocol.extract_response_typ(resp)
                         messages = ds_protocol.extract_json(resp)
+                        print(messages)
                         return messages
                     else:
                         raise ConnectionException
