@@ -131,16 +131,16 @@ class Body(tk.Frame):
         """
         Is called upon initialization to add the body to the overall frame.
         """
-        user_frame = tk.Frame(master=self, width=250, bg="gray")
+        user_frame = tk.Frame(master=self, width=250, bg="pink")
         user_frame.pack(fill=tk.BOTH, side=tk.LEFT)
         self.user_tree = ttk.Treeview(user_frame)
         self.user_tree.bind("<<TreeviewSelect>>", self.node_select)
         self.user_tree.pack(fill=tk.BOTH, side=tk.TOP, expand=True, padx=5, pady=5)
         
-        view_frame = tk.Frame(master=self, bg="gray")
+        view_frame = tk.Frame(master=self, bg="pink")
         view_frame.pack(fill=tk.BOTH, side=tk.TOP, expand=True)
 
-        entry_frame = tk.Frame(master=self, bg="gray")
+        entry_frame = tk.Frame(master=self, bg="pink")
         entry_frame.pack(fill=tk.BOTH, side=tk.BOTTOM, expand=True)
 
         self.msg_view = tk.Text(master=view_frame, height=20)
@@ -204,7 +204,7 @@ class Footer(tk.Frame):
         """
         Is called upon initialization to add the footer to the overall frame.
         """
-        footer_frame = tk.Frame(master=self, bg="gray")
+        footer_frame = tk.Frame(master=self, bg="pink")
         footer_frame.pack(fill=tk.BOTH, side=tk.BOTTOM)
         
         send_button = tk.Button(master=footer_frame, text="Send", width=20)
@@ -416,7 +416,7 @@ class MainApp(tk.Frame):
 
 if __name__ == "__main__":
     main = tk.Tk()
-    main.title("ICS 32 Mesenger Demo")
+    main.title("DAD-dy Messenger")
     main.geometry("720x480")
     main.option_add('*tearOff', False)
     MainApp(main)
