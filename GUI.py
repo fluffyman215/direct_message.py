@@ -37,7 +37,11 @@ class Body(tk.Frame):
         """
         index = int(self.user_tree.selection()[0])-2
         l = list(self._users)
-        user = l[index]
+        try:
+            user = l[index]
+        except:
+            index = int(self.user_tree.selection()[0])-3
+            user = l[index]
         entry = ''
         self.recipient = user
         for users in self._users:
