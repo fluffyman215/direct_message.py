@@ -186,7 +186,6 @@ class DirectMessenger:
                         resp = self.write(connect, new_msg)
                         resps = ds_protocol.extract_response_typ(resp)
                         messages = ds_protocol.extract_json(resp)
-                        print(messages)
                         return messages
                     else:
                         raise ConnectionException
