@@ -140,6 +140,7 @@ class DirectMessenger:
         Will connect to the server.
         Will retrieve of new messages that were sent to the user.
         Returns a list of DirectMessage objects containing new messages.
+        Returns none if something did not connect or can not be retrieved.
         """
         connect = self.connection(self.dsuserver, port)
         try:
@@ -149,11 +150,15 @@ class DirectMessenger:
             else:
                 try:
                     self.token = self.join(connect, self.username, self.password)
-                    new_msg = ds_protocol.request_messages(self.token,'new')
-                    resp = self.write(connect, new_msg)
-                    resps = ds_protocol.extract_response_typ(resp)
-                    messages = ds_protocol.extract_json(resp)
-                    return messages
+                    if token != None:
+                        new_msg = ds_protocol.request_messages(self.token,'new')
+                        resp = self.write(connect, new_msg)
+                        resps = ds_protocol.extract_response_typ(resp)
+                        messages = ds_protocol.extract_json(resp)
+                        return messages
+                    else:
+                        raise ConnectionException
+                        return None
                 except:
                     print('ERROR')
                     return None
@@ -166,6 +171,7 @@ class DirectMessenger:
         Will connect to the server.
         Will retrieve of all messages that were sent to the user.
         Returns a list of DirectMessage objects containing all messages.
+        Returns none if something did not connect or can not be retrieved.
         """
         connect = self.connection(self.dsuserver, port)    
         try:
@@ -175,15 +181,17 @@ class DirectMessenger:
             else:
                 try:
                     self.token = self.join(connect, self.username, self.password)
-                    
-                    new_msg = ds_protocol.request_messages(self.token,'all')
-                    
-                    resp = self.write(connect, new_msg)
-                    resps = ds_protocol.extract_response_typ(resp)
-                    messages = ds_protocol.extract_json(resp)
-                    return messages
+                    if token != None:
+                        new_msg = ds_protocol.request_messages(self.token,'all')
+                        resp = self.write(connect, new_msg)
+                        resps = ds_protocol.extract_response_typ(resp)
+                        messages = ds_protocol.extract_json(resp)
+                        return messages
+                    else:
+                        raise ConnectionException
+                        return None
                 except:
-                    print("ERROR")
+                    print('ERROR')
                     return None
         except ConnectionException:
             print("Connection Error")
