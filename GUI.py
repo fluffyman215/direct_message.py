@@ -237,6 +237,7 @@ class MainApp(tk.Frame):
         self.password = 'PASSWORD'
         self.token = 'user_token'
         self._draw()
+        self.refresh_msg()
 
 
     def send_message(self):
