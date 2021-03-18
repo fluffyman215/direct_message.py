@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
-from ds_messenger import DirectMessenger
+from ds_messenger import DirectMessenger, ConnectionException
 import HelpWindow
 from ExtraCreditAPI import ExtraCreditAPI
 from OpenWeather import OpenWeather
