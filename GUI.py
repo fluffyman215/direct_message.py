@@ -248,6 +248,7 @@ class MainApp(tk.Frame):
         resp = dm.send(self.body.get_text_entry(), self.body.recipient)
         if resp == 'ok':
             print('Message Sent Successful')
+            self.body.set_text_entry('')
             self.footer.set_status_two('Message Sent Successful')   
         else:
             print('Message Unable To Send')
